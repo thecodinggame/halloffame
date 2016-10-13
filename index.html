@@ -7,8 +7,8 @@
     </style>
   </head>
   <body>
-    <h1>Score <span id="score">0</span>/<span id="max-score"></span></h1>
-    <ul id="results">
+    <h1>The coding game - Hall of fame</h1>
+    <ul id="players">
     </ul>
     
     <script>
@@ -24,20 +24,11 @@
         calls.push(call);
       });
       
-      var web = 'https://travis-ci.org/' + player + '/';
-      $('#max-score').text(levels.length);          
       $.when.apply($, calls).done(function() {
         var score = 0;            
-        $.each(levels, function(index, repo) {
-          var result = results[index];          
-          var href = web + repo;
-          var color = result == 1 ? 'passed' : 'failed';
-          var item = '<li class="'+ color +'"><a class="'+ color +'" href="'+ href +'">'+ repo +'</a></li>';
-          
-          $('#results').append(item);
-          score += result;
-        });
-        $('#score').text(score);
+        $.each(levels, function(index, repo) { score += results[index]; });
+        var player = '<li>'+ player + ':' + score +'</li>';          
+        $('#players').append(player);
       });
     </script>
   </body>
