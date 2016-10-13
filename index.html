@@ -22,8 +22,12 @@
         var api = 'https://api.travis-ci.org/repos/' + player + '/';
         $.each(levels, function(index, repo) {
           var target = api + repo + '.json';        
-          var call = $.getJSON(target, function(data) { results[index] = (1-data.last_build_result); })
-                      .error(function() { results[index] = 0; });
+          var call = $.ajax({
+            url: target,
+            dataType: 'json',
+            success: function(data) { results[index] = (1-data.last_build_result); },
+            error: function() { results[index] = 0; }
+          });
           calls.push(call);
         });
 
