@@ -18,17 +18,26 @@
       $.each(players, function(playerIndex, player) {
         var results = [];
         var calls = [];
-
+        
         var api = 'https://api.travis-ci.org/repos/' + player + '/';
         $.each(levels, function(index, repo) {
           results[index] = 0;
+          var call = $.Deferred();
+          var followup = function(e) {
+            if (this.readyState == 4) {
+              if (this.status == 200) {
+                var data = JSON.parse(this.responseText);
+                results[index] = 1 - data.last_build_result;
+              }
+              call.resolve();
+            }
+          };
+          
           var target = api + repo + '.json';        
-          var call = $.ajax({
-            url: target,
-            dataType: 'json',
-            success: function(data) { results[index] = (1-data.last_build_result); }
-          });
-          console.log('pushing call for repo ' + repo + ' for player ' + player);
+          var req = new XMLHttpRequest();
+          req.open('GET', target, true);
+          req.onreadystatechange = followup;
+          req.send();
           calls.push(call);
         });
         
