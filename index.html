@@ -8,8 +8,9 @@
   </head>
   <body>
     <h1>The coding game - Hall of fame</h1>
-    <ul id="players">
-    </ul>
+    <table id="players">
+      <tr><th>Player</th><th>Score</th></tr>
+    </table>
     
     <script>
       var players = [
@@ -57,7 +58,7 @@
       $.when.apply($, dones).done(function() {
         players.sort(function(a, b) { return b.score - a.score; });
         $.each(players, function(playerIndex, player) { 
-          var item = '<li>'+ player.login + ':' + player.score +'</li>';          
+          var item = '<tr><td>'+ player.login + '</td><td>' + player.score +'</td></tr>';          
           $('#players').append(item);
         });
       });
