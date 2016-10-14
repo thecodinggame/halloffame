@@ -11,6 +11,7 @@
     <h1>The coding game</h1>
     <hr/>
     <h2>Hall of fame</h2>
+    <label id="max-score"></label>
     <table id="players">
       <thead>
         <tr><th>Player</th><th>Score</th></tr>
@@ -25,9 +26,13 @@
         {login:'yosethegame', score:undefined}, 
         {login:'ericminio', score:undefined}
       ];
-      var levels = ['thecodinggame-javascript-1', 'thecodinggame-javascript-2'];       
+      var levels = [
+        'thecodinggame-javascript-1', 
+        'thecodinggame-javascript-2'
+      ];       
       var dones = [];
       
+      $('#max-score').text('Maximum score is ' + levels.length);
       $.each(players, function(playerIndex, player) {
         dones[playerIndex] = $.Deferred();
         var results = [];
