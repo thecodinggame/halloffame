@@ -66,6 +66,7 @@
       $.when.apply($, dones).done(function() {                
         players.sort(function(a, b) { return b.score - a.score; });
         var template = $('#template').parent().html();
+        $('#template').remove();
         $.each(players, function(playerIndex, player) { 
           var item = template.replace('this-login', player.login).replace('this-score', player.score);  
           $('#players').append(item);
