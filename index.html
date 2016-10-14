@@ -4,10 +4,13 @@
     <style>
       .passed { color: #39aa56; }
       .failed { color: #db4545; }
+      .score { text-align: right } 
     </style>
   </head>
   <body>
-    <h1>The coding game - Hall of fame</h1>
+    <h1>The coding game</h1>
+    <hr/>
+    <h2>Hall of fame</h2>
     <table id="players">
       <tr><th>Player</th><th>Score</th></tr>
     </table>
@@ -58,7 +61,7 @@
       $.when.apply($, dones).done(function() {
         players.sort(function(a, b) { return b.score - a.score; });
         $.each(players, function(playerIndex, player) { 
-          var item = '<tr><td>'+ player.login + '</td><td>' + player.score +'</td></tr>';          
+          var item = '<tr><td>'+ player.login + '</td><td class="score">' + player.score +'</td></tr>';          
           $('#players').append(item);
         });
       });
