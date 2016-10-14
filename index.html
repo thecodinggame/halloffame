@@ -12,7 +12,12 @@
     <hr/>
     <h2>Hall of fame</h2>
     <table id="players">
-      <tr><th>Player</th><th>Score</th></tr>
+      <thead>
+        <tr><th>Player</th><th>Score</th></tr>
+      </thead>
+      <tbody>
+        <tr id="template"><td>this-login</td><td>this-score</td></tr>
+    </tbody>
     </table>
     
     <script>
@@ -58,10 +63,11 @@
         });
       });
       
-      $.when.apply($, dones).done(function() {
+      $.when.apply($, dones).done(function() {                
         players.sort(function(a, b) { return b.score - a.score; });
+        var template = $('#template').parent().html();
         $.each(players, function(playerIndex, player) { 
-          var item = '<tr><td>'+ player.login + '</td><td class="score">' + player.score +'</td></tr>';          
+          var item = template.replace('this-login', player.login).replace('this-score', player.score);  
           $('#players').append(item);
         });
       });
