@@ -12,17 +12,19 @@
     </ul>
     
     <script>
-      var players = ['yosethegame', 'ericminio'];
-      var scores = [];
-      var dones = [];
+      var players = [
+        {login:'yosethegame', score:undefined}, 
+        {login:'ericminio', score:undefined}
+      ];
       var levels = ['thecodinggame-javascript-1', 'thecodinggame-javascript-2'];       
+      var dones = [];
       
       $.each(players, function(playerIndex, player) {
         dones[playerIndex] = $.Deferred();
         var results = [];
         var calls = [];
         
-        var api = 'https://api.travis-ci.org/repos/' + player + '/';
+        var api = 'https://api.travis-ci.org/repos/' + player.login + '/';
         $.each(levels, function(index, repo) {
           results[index] = 0;
           var call = $.Deferred();
@@ -47,15 +49,14 @@
         $.when.apply($, calls).done(function() {
           var score = 0;            
           $.each(levels, function(index, repo) { score += results[index]; });
-          scores[playerIndex] = score;
+          players[playerIndex].score = score;
           dones[playerIndex].resolve();          
         });
       });
       
       $.when.apply($, dones).done(function() {
         $.each(players, function(playerIndex, player) { 
-          var score = scores[playerIndex];
-          var item = '<li>'+ player + ':' + score +'</li>';          
+          var item = '<li>'+ player.login + ':' + player.score +'</li>';          
           $('#players').append(item);
         });
       });
