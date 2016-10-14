@@ -1,7 +1,7 @@
 https://thecodinggame.github.io/halloffame/
 
 Do you want to be in the hall of fame?
-* fork the halloffame repo
+* fork this repo
 * in index.html, find the player list and add your name
 * send me a pull request
 
