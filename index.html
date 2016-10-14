@@ -28,6 +28,7 @@
             dataType: 'json',
             success: function(data) { results[index] = (1-data.last_build_result); }
           });
+          console.log('pushing call for repo ' + repo + ' for player ' + player);
           calls.push(call);
         });
         
