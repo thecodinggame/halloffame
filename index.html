@@ -55,6 +55,7 @@
       });
       
       $.when.apply($, dones).done(function() {
+        players.sort(function(a, b) { return a.score - b.score; });
         $.each(players, function(playerIndex, player) { 
           var item = '<li>'+ player.login + ':' + player.score +'</li>';          
           $('#players').append(item);
