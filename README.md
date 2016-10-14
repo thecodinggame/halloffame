@@ -6,7 +6,7 @@ Do you want to be in the hall of fame?
 * send me a pull request
 
 Do you want to see your score increase?
-* fork one of the tracked repositories
+* fork one of the tracked repositories (see the levels list in index.html)
 * setup a travis build for your new repository
 * green the tests!
 * refresh the hall of fame
