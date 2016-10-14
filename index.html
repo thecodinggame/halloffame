@@ -21,16 +21,17 @@
 
         var api = 'https://api.travis-ci.org/repos/' + player + '/';
         $.each(levels, function(index, repo) {
+          results[index] = 0;
           var target = api + repo + '.json';        
           var call = $.ajax({
             url: target,
             dataType: 'json',
-            success: function(data) { results[index] = (1-data.last_build_result); },
-            error: function() { results[index] = 0; }
+            success: function(data) { results[index] = (1-data.last_build_result); }
           });
           calls.push(call);
         });
 
+        console.log('render for player ' + player);
         $.when.apply($, calls).done(function() {
           var score = 0;            
           $.each(levels, function(index, repo) { score += results[index]; });
