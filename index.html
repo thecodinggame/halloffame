@@ -13,9 +13,12 @@
     
     <script>
       var players = ['yosethegame', 'ericminio'];
+      var scores = [];
+      var dones = [];
       var levels = ['thecodinggame-javascript-1', 'thecodinggame-javascript-2'];       
       
       $.each(players, function(playerIndex, player) {
+        dones[playerIndex] = $.Deferred();
         var results = [];
         var calls = [];
         
@@ -42,9 +45,16 @@
         });
         
         $.when.apply($, calls).done(function() {
-          console.log('render for player ' + player);
           var score = 0;            
           $.each(levels, function(index, repo) { score += results[index]; });
+          scores[playerIndex] = score;
+          dones[playerIndex].resolve();          
+        });
+      });
+      
+      $.when.apply($, dones).done(function() {
+        $.each(players, function(playerIndex, player) { 
+          var score = scores[playerIndex];
           var item = '<li>'+ player + ':' + score +'</li>';          
           $('#players').append(item);
         });
