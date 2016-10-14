@@ -30,9 +30,9 @@
           });
           calls.push(call);
         });
-
-        console.log('render for player ' + player);
+        
         $.when.apply($, calls).done(function() {
+          console.log('render for player ' + player);
           var score = 0;            
           $.each(levels, function(index, repo) { score += results[index]; });
           var item = '<li>'+ player + ':' + score +'</li>';          
