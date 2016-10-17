@@ -10,13 +10,51 @@
     <h1>The coding game</h1>
     <hr/>
     <h2 id="player">player-login</h2>
-    
-    
+    <label id="score">player-score</label>
+        
     <script>
       var href = window.location.href;
-      var login = href.substring(href.indexOf('player=')+7);
+      var player = href.substring(href.indexOf('player=')+7);
       var playerElement = document.getElementById('player');
-      player.innerHTML = login;
+      playerElement.innerHTML = login;
+      
+      var levels = [
+        'thecodinggame-javascript-1', 
+        'thecodinggame-javascript-2'
+      ]; 
+      var results = [];
+      var calls = [];
+      
+      var api = 'https://api.travis-ci.org/repos/' + player + '/';
+      $.each(levels, function(index, repo) {
+        results[index] = 0;
+        var call = $.Deferred();
+        var followup = function(e) {
+          if (this.readyState == 4) {
+            if (this.status == 200) {
+              var data = JSON.parse(this.responseText);
+              results[index] = 1 - data.last_build_result;
+            }
+            call.resolve();
+          }
+        };
+
+        var target = api + repo + '.json';        
+        var req = new XMLHttpRequest();
+        req.open('GET', target, true);
+        req.onreadystatechange = followup;
+        req.send();
+        calls.push(call);
+      });
+      
+      $.when.apply($, calls).done(function() {
+        var score = 0;            
+        $.each(levels, function(index, repo) { score += results[index]; });
+        
+        var scoreElement = document.getElementById('score');
+        scoreElement.innerHTML = score;
+      });
+      
     </script>
   </body>
 </html>
