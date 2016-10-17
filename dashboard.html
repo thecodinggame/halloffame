@@ -12,6 +12,9 @@
     <h2 id="player">player-login</h2>
     <label id="score">player-score</label>
         
+    <ul id="results">
+    </ul>
+    
     <script>
       var href = window.location.href;
       var player = href.substring(href.indexOf('player=')+7);
@@ -49,10 +52,19 @@
       
       $.when.apply($, calls).done(function() {
         var score = 0;            
-        $.each(levels, function(index, repo) { score += results[index]; });
-        
+        $.each(levels, function(index, repo) { score += results[index]; });        
         var scoreElement = document.getElementById('score');
         scoreElement.innerHTML = score;
+        
+        var web = 'https://travis-ci.org/' + player + '/';
+        $.each(levels, function(index, repo) {
+          var result = results[index];          
+          var href = web + repo;
+          var color = result == 1 ? 'passed' : 'failed';
+          var item = '<li class="'+ color +'"><a class="'+ color +'" href="'+ href +'">'+ repo +'</a></li>';
+          
+          $('#results').append(item);
+        });
       });
       
     </script>
