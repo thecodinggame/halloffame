@@ -1,0 +1,22 @@
+<html>
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <style>
+      .passed { color: #39aa56; }
+      .failed { color: #db4545; }
+    </style>
+  </head>
+  <body>
+    <h1>The coding game</h1>
+    <hr/>
+    <h2 id="player">player-login</h2>
+    
+    
+    <script>
+      var href = window.location.href;
+      var login = href.substring(href.indexOf('player=')+7);
+      var playerElement = document.getElementById('player');
+      player.innerHTML = login;
+    </script>
+  </body>
+</html>
