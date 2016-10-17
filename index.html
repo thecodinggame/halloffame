@@ -72,7 +72,8 @@
         var template = $('#template').parent().html();
         $('#template').remove();
         $.each(players, function(playerIndex, player) { 
-          var item = template.replace('this-login', player.login).replace('this-score', player.score);  
+          var link = '<a href="dashboard.html?player=' + player.login + '">' + player.login + '</a'>;
+          var item = template.replace('this-login', link).replace('this-score', player.score);  
           $('#players').append(item);
         });
       });
