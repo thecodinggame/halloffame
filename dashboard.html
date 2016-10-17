@@ -1,0 +1,76 @@
+<html>
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <style>
+      .passed { color: #39aa56; }
+      .failed { color: #db4545; }
+      label { font-weight: bold; }
+    </style>
+  </head>
+  <body>
+    <h1>The coding game</h1>
+    <hr/>
+    <label>Player:</label><span id="player">this-player</span>
+    <br/>
+    <label>Score:</label><span id="score">this-score</span>
+    <br/>
+    <br/>
+    <label>Levels:</label>
+    <ul id="results">
+    </ul>
+    
+    <script>
+      var href = window.location.href;
+      var player = href.substring(href.indexOf('player=')+7);
+      var playerElement = document.getElementById('player');
+      playerElement.innerHTML = player;
+      
+      var levels = [
+        'thecodinggame-javascript-1', 
+        'thecodinggame-javascript-2'
+      ]; 
+      var results = [];
+      var calls = [];
+      
+      var api = 'https://api.travis-ci.org/repos/' + player + '/';
+      $.each(levels, function(index, repo) {
+        results[index] = 0;
+        var call = $.Deferred();
+        var followup = function(e) {
+          if (this.readyState == 4) {
+            if (this.status == 200) {
+              var data = JSON.parse(this.responseText);
+              results[index] = 1 - data.last_build_result;
+            }
+            call.resolve();
+          }
+        };
+
+        var target = api + repo + '.json';        
+        var req = new XMLHttpRequest();
+        req.open('GET', target, true);
+        req.onreadystatechange = followup;
+        req.send();
+        calls.push(call);
+      });
+      
+      $.when.apply($, calls).done(function() {
+        var score = 0;            
+        $.each(levels, function(index, repo) { score += results[index]; });        
+        var scoreElement = document.getElementById('score');
+        scoreElement.innerHTML = score;
+        
+        var web = 'https://travis-ci.org/' + player + '/';
+        $.each(levels, function(index, repo) {
+          var result = results[index];          
+          var href = web + repo;
+          var color = result == 1 ? 'passed' : 'failed';
+          var item = '<li class="'+ color +'"><a class="'+ color +'" href="'+ href +'">'+ repo +'</a></li>';
+          
+          $('#results').append(item);
+        });
+      });
+      
+    </script>
+  </body>
+</html>
