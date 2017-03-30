@@ -31,18 +31,20 @@
         'thecodinggame-javascript-1', 
         'thecodinggame-javascript-2'
       ];       
-      var dones = [];
+      var allPlayers = new Promises();
       
       $('#max-score').text('Maximum score is ' + levels.length);
       $.each(players, function(playerIndex, player) {
-        dones[playerIndex] = $.Deferred();
+        var playerDone = new Promise();
+        allPlayers.waitFor(playerDone);
         var results = [];
-        var calls = [];
+        var calls = new Promises();
         
         var api = 'https://api.travis-ci.org/repos/' + player.login + '/';
         $.each(levels, function(index, repo) {
           results[index] = 0;
-          var call = $.Deferred();
+          var call = new Promise();
+          calls.waitFor(call);
           var followup = function(e) {
             if (this.readyState == 4) {
               if (this.status == 200) {
@@ -57,19 +59,18 @@
           var req = new XMLHttpRequest();
           req.open('GET', target, true);
           req.onreadystatechange = followup;
-          req.send();
-          calls.push(call);
+          req.send();          
         });
         
-        $.when.apply($, calls).done(function() {
+        calls.all(function() {
           var score = 0;            
           $.each(levels, function(index, repo) { score += results[index]; });
           players[playerIndex].score = score;
-          dones[playerIndex].resolve();          
+          playerDone.resolve();          
         });
       });
       
-      $.when.apply($, dones).done(function() {                
+      allPlayers.all(function() {                
         players.sort(function(a, b) { return b.score - a.score; });
         var template = $('#template').parent().html();
         $('#template').remove();
