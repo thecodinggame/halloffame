@@ -1,7 +1,7 @@
 <html>
   <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-    <script src="promises.js"></script>
+    <script src="https://unpkg.com/yop-promises@1.0.0"></script>
     <style>
       .score { text-align: right } 
       #max-score { display:inline-block; margin-bottom: 25px; }
@@ -62,7 +62,7 @@
           req.send();          
         });
         
-        calls.all(function() {
+        calls.done(function() {
           var score = 0;            
           $.each(levels, function(index, repo) { score += results[index]; });
           players[playerIndex].score = score;
@@ -70,7 +70,7 @@
         });
       });
       
-      allPlayers.all(function() {                
+      allPlayers.done(function() {                
         players.sort(function(a, b) { return b.score - a.score; });
         var template = $('#template').parent().html();
         $('#template').remove();
